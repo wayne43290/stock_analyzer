@@ -110,16 +110,19 @@ class aStock():
         self.notEnoughStockAmount = 0
 
         self.sum5 = self.sum4 = self.sum3 = self.sum2 = self.chg5 = self.chg4 = self.chg3 = self.chg2 = self.chg1 = 0.0
+        self.sum6 = self.chg6 = 0.0
         self.chg_abs_buy_t = 0.0   # accumulated chg
         self.chg_abs_sell_t = 0.0   # accumulated chg
         self.chg_buy_t = 0.0   # accumulated relative chg
         self.chg_sell_t = 0.0   # accumulated relative chg
         self.pre_day_price = 0.0 # used to calculate the price affected by the allocated money
     def updateSumChg(self, chg):
+        self.sum6 = self.sum6 - self.chg6 + chg
         self.sum5 = self.sum5 - self.chg5 + chg
         self.sum4 = self.sum4 - self.chg4 + chg
         self.sum3 = self.sum3 - self.chg3 + chg
         self.sum2 = self.sum2 - self.chg2 + chg
+        self.chg6 = self.chg5
         self.chg5 = self.chg4
         self.chg4 = self.chg3
         self.chg3 = self.chg2
@@ -136,9 +139,11 @@ class aStock():
             # do nothing 
     def clearBuySumChg(self, threshold_toBuy4w):
         self.sum5 = self.sum4 = self.sum3 = self.sum2 = self.chg5 = self.chg4 = self.chg3 = self.chg2 = self.chg1 = 0.0
+        self.sum6 = self.chg6 = 0.0
         self.chg_abs_buy_t -= threshold_toBuy4w
     def clearSellSumChg(self, threshold_toSell8w):
         self.sum5 = self.sum4 = self.sum3 = self.sum2 = self.chg5 = self.chg4 = self.chg3 = self.chg2 = self.chg1 = 0.0
+        self.sum6 = self.chg6 = 0.0
         self.chg_abs_sell_t -= threshold_toSell8w
 
     def updateBuySellChg_by_analyze_mode(self, analyze_mode):
@@ -147,7 +152,8 @@ class aStock():
             self.chg_sell_t = self.chg_abs_sell_t
         elif analyze_mode == "absBuy_relativeSell":
             self.chg_buy_t = self.chg_abs_buy_t
-            self.chg_sell_t = max(self.sum5, self.sum4, self.sum3, self.sum2, self.chg1)
+            #self.chg_sell_t = max(self.sum5, self.sum4, self.sum3, self.sum2, self.chg1)
+            self.chg_sell_t = max(self.sum6, self.sum5, self.sum4, self.sum3, self.sum2, self.chg1)
         elif analyze_mode == "absSell_relativeBuy":
             self.chg_buy_t = min(self.sum5, self.sum4, self.sum3, self.sum2, self.chg1)
             self.chg_sell_t = self.chg_abs_sell_t
@@ -415,7 +421,8 @@ print(" mode:{} threshold_toBuy4w:{} threshold_toSell8w:{}".format(analyze_mode,
 print(" investigate_ratio_toSellMore:{} toSellMoreStock_amount:{}".format(investigate_ratio_toSellMore, toSellMoreStock_amount))
 #print(" investigate_ratio_toBuyMore:{} toBuyMoreStock_amount:{}".format(investigate_ratio_toBuyMore, toBuyMoreStock_amount*stock_scale))
 print("*Total Profit: {}".format(profit))
-print(" stockAmount:{}\n sellMoreAmount:{}\n buyAmount:{}\n sellAmount:{}\n notEnoughMoneyAmount:{}\n notEnoughStockAmount:{}\n".format(stock_0050.stockAmount+stock_006208.stockAmount, stock_0050.sellMoreAmount+stock_006208.sellMoreAmount, stock_0050.buyAmount+stock_006208.buyAmount, stock_0050.sellAmount+stock_006208.sellAmount, stock_0050.notEnoughMoneyAmount, stock_0050.notEnoughStockAmount))
+print(" 0050:\nstockAmount:{}\n sellMoreAmount:{}\n buyAmount:{}\n sellAmount:{}\n notEnoughMoneyAmount:{}\n notEnoughStockAmount:{}".format(stock_0050.stockAmount, stock_0050.sellMoreAmount, stock_0050.buyAmount, stock_0050.sellAmount, stock_0050.notEnoughMoneyAmount, stock_0050.notEnoughStockAmount))
+print(" 006208:\nstockAmount:{}\n sellMoreAmount:{}\n buyAmount:{}\n sellAmount:{}\n notEnoughMoneyAmount:{}\n notEnoughStockAmount:{}\n".format(stock_006208.stockAmount, stock_006208.sellMoreAmount, +stock_006208.buyAmount, stock_006208.sellAmount, stock_006208.notEnoughMoneyAmount, stock_006208.notEnoughStockAmount))
 
 
 

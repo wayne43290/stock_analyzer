@@ -152,13 +152,13 @@ allocMoneyDates0056 = {
 }
 
 
-moneyLeft = 400000  # I have 60w right now  # TODO: adjust this cost
-originMoney = 400000  # I have 60w at first # TODO: adjust this cost
+moneyLeft = 250000  # I have 60w right now  # TODO: adjust this cost
+originMoney = 250000  # I have 60w at first # TODO: adjust this cost
 buyingTaxCost = 0.000334                   # TODO: adjust this cost
-sellingTaxCost = 0.001334                  # TODO: adjust this cost
-stock_filePath = 'tsmc_0050.csv'        # TODO: adjust this
-allocMoneyDates = allocMoneyDates0050      # TODO: adjust this
-stock_scale = 1.0                          # TODO: control to use around 4w to buy each time
+sellingTaxCost = 0.003334                  # TODO: adjust this cost
+stock_filePath = 'tsmc_2884.csv'        # TODO: adjust this
+allocMoneyDates = allocMoneyDates2884      # TODO: adjust this
+stock_scale = 4.0                          # TODO: control to use around 4w to buy each time
 toBuyStock_amount = 0.5                      
 toSellStock_amount = 1.0                    
 
@@ -182,7 +182,7 @@ sellMoreAmount = 0
 notEnoughMoneyAmount = 0
 notEnoughStockAmount = 0
 
-sum5 = sum4 = sum3 = sum2 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
+sum6 = sum5 = sum4 = sum3 = sum2 = chg6 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
 chg_abs_buy_t = 0.0   # accumulated chg
 chg_abs_sell_t = 0.0   # accumulated chg
 chg_buy_t = 0.0   # accumulated relative chg
@@ -232,10 +232,12 @@ while line:
         #print("date: {}, moneyInStockRatio: {}".format(date, moneyInStockRatio))
         #print("stockAmount:{}, moneyLeft:{}, allocatedDeductedChg:{}, chg:{} ".format(stockAmount, moneyLeft, allocatedDeductedChg, chg))
 
+    sum6 = sum6 - chg6 + chg
     sum5 = sum5 - chg5 + chg
     sum4 = sum4 - chg4 + chg
     sum3 = sum3 - chg3 + chg
     sum2 = sum2 - chg2 + chg
+    chg6 = chg5
     chg5 = chg4
     chg4 = chg3
     chg3 = chg2
@@ -257,6 +259,7 @@ while line:
     elif analyze_mode == "absBuy_relativeSell":
         chg_buy_t = chg_abs_buy_t
         chg_sell_t = max(sum5, sum4, sum3, sum2, chg1)
+        #chg_sell_t = max(sum3, sum2, chg1)
     elif analyze_mode == "absSell_relativeBuy":
         chg_buy_t = min(sum5, sum4, sum3, sum2, chg1)
         chg_sell_t = chg_abs_sell_t
@@ -296,7 +299,7 @@ while line:
             #print("Buy 1 stock! Date:{}, stockAmount:{}, buyAmount:{}, moneyLeft:{}".format(date, stockAmount, buyAmount, moneyLeft))
             #print("date: {}, moneyInStockRatio: {}".format(date, moneyInStockRatio))
             chg_abs_buy_t -= threshold_toBuy4w
-            sum5 = sum4 = sum3 = sum2 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
+            sum6 = sum5 = sum4 = sum3 = sum2 = chg6 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
         else:
             notEnoughMoneyAmount += stockAmount_add
             #print("skip 1 buy. Date:{}, notEnoughMoneyAmount:{}".format(date, notEnoughMoneyAmount))
@@ -314,7 +317,7 @@ while line:
             #print("sell more! moneyInStockRatio: {}".format(moneyInStockRatio))
             #print("Sell 2 stock! Date:{}, stockAmount:{}, sellAmount:{}, moneyLeft:{}".format(date, stockAmount, sellAmount, moneyLeft))
             chg_abs_sell_t -= threshold_toSell8w
-            sum5 = sum4 = sum3 = sum2 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
+            sum6 = sum5 = sum4 = sum3 = sum2 = chg6 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
         else:
             stockAmount_sub = toSellStock_amount*stock_scale
             if stockAmount >= stockAmount_sub:  # sell normally (less)
@@ -328,7 +331,7 @@ while line:
                 #print("moneyInStockRatio: {}".format(moneyInStockRatio))
                 #print("Sell 2 stock! Date:{}, stockAmount:{}, sellAmount:{}, moneyLeft:{}".format(date, stockAmount, sellAmount, moneyLeft))
                 chg_abs_sell_t -= threshold_toSell8w
-                sum5 = sum4 = sum3 = sum2 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
+                sum6 = sum5 = sum4 = sum3 = sum2 = chg6 = chg5 = chg4 = chg3 = chg2 = chg1 = 0.0
             else:
                 notEnoughStockAmount += stockAmount_sub
                 #print("skip 2 sell. Date:{}, notEnoughStockAmount:{}".format(date, notEnoughStockAmount))

@@ -1,9 +1,9 @@
 
-For($threshold_toBuy500 = -2.3; $threshold_toBuy500 -ge -2.5; $threshold_toBuy500-=0.1){
+For($threshold_toBuy500 = -2.4; $threshold_toBuy500 -ge -2.4; $threshold_toBuy500-=0.1){
     Write-Host "threshold_toBuy500: $threshold_toBuy500"
-    For($threshold_toSell1000 = 5.0; $threshold_toSell1000 -le 5.0; $threshold_toSell1000+=0.1){
+    For($threshold_toSell1000 = 4.9; $threshold_toSell1000 -le 5.0; $threshold_toSell1000+=0.1){
         Write-Host "threshold_toSell1000: $threshold_toSell1000"
-        For($investigate_ratio_toSellMore = 0.9; $investigate_ratio_toSellMore -le 1.0; $investigate_ratio_toSellMore+=0.05){
+        For($investigate_ratio_toSellMore = 0.90; $investigate_ratio_toSellMore -le 1.0; $investigate_ratio_toSellMore+=0.01){
             Write-Host "investigate_ratio_toSellMore: $investigate_ratio_toSellMore"
             #For($investigate_ratio_toBuyMore = -1; $investigate_ratio_toBuyMore -le -1; $investigate_ratio_toBuyMore+=0.1){
                 #Write-Host "investigate_ratio_toBuyMore: $investigate_ratio_toBuyMore"
